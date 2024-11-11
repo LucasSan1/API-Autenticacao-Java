@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.autentication.autentication.entity.User;
 import com.autentication.autentication.repository.UserRepository;
 
+
 @Service
 public class UserService {
     
@@ -42,6 +43,30 @@ public class UserService {
     public User loginUser(String email){
         System.out.printf(email);
         return userRepository.findByEmail(email); // Busca e retorna o usuário pelo email fornecido
+    }
+
+    public ResponseEntity<String>  updateUser(long id, User user){
+        User userExist = userRepository.findById(id).orElse(null);
+
+        if(userExist == null){
+            return new ResponseEntity<>("Usuário não encontrado.", HttpStatus.NOT_FOUND);
+        }
+
+        userExist.setSenha(user.getSenha());
+        userRepository.save(userExist);
+
+        return new ResponseEntity<>("Usuário atualizado com sucesso!", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> deleteUser(Long id){
+        User userExist = userRepository.findById(id).orElse(null);
+
+        if (userExist == null){
+            return new ResponseEntity<>("Usuário não encontrado.", HttpStatus.NOT_FOUND);
+        }
+
+        userRepository.delete(userExist);
+        return new ResponseEntity<>("Usuário deletado com sucesso!", HttpStatus.OK);
     }
 
 }
