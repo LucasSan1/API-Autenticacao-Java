@@ -6,6 +6,8 @@ Esta é uma API de autenticação desenvolvida em Java com Spring Boot, utilizan
 
 - **Registro de Usuário**: Permite o cadastro de novos usuários.
 - **Login de Usuário**: Realiza o login de usuários já registrados.
+- **Atualização da sua senha**: Permite realizar a troca da senha do usuario logado (Ainda precisa ser validado).
+- **Deleta a conta do usuario**: Permite deletar apenas a conta do usuario que logou no sistema (Ainda precisa ser validado).
 - **Proteção de Endpoints**: A API irá permitir que endpoints específicos sejam acessados apenas por usuários autenticados (futuramente com JWT).
 
 ## Tecnologias Utilizadas
