@@ -31,8 +31,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-       public ResponseEntity<User> login(@RequestBody LoginRequest loginRequest) {
-        return userService.loginUser(loginRequest); // Chama o método de login do serviço de usuários
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        return userService.loginUser(loginRequest);
     }
 
     @PutMapping("{id}")

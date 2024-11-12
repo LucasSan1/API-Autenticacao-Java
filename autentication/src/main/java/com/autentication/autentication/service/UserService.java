@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.autentication.autentication.DTO.ErrorResponse;
 import com.autentication.autentication.DTO.LoginRequest;
 import com.autentication.autentication.entity.User;
 import com.autentication.autentication.repository.UserRepository;
@@ -44,21 +45,24 @@ public class UserService {
     }
 
     // Método para realizar o login de um usuário
-    public ResponseEntity<User> loginUser(LoginRequest loginRequest) {
+    public ResponseEntity<?> loginUser(LoginRequest loginRequest) {
 
         // Pega o email e a senha do DTO (LoginRequest)
-        String emailRecebido = loginRequest.getEmail(); 
+        String emailRecebido = loginRequest.getEmail();
         String senhaRecebida = loginRequest.getSenha();
     
-        // Busca o usuário no banco de dados com o email fornecido
-        User user = userRepository.findByEmail(emailRecebido);
-        
-      
+        // Busca o usuário no banco de dados com o email e senha fornecidos
+        User user = userRepository.findByEmailAndSenha(emailRecebido, senhaRecebida);
+    
+        // Caso o usuário as credenciais estejam erradas
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); 
+            // Retorna uma resposta com o status 404 e uma mensagem de erro
+            ErrorResponse errorResponse = new ErrorResponse("Email ou senha errados");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
-        
-        return ResponseEntity.ok(user);
+    
+        // Caso o login seja bem-sucedido, retorna o usuário
+        return ResponseEntity.ok("Logado com sucesso");
     }
 
     // Método para atualizar os dados de um usuário
