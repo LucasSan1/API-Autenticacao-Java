@@ -14,5 +14,5 @@ Esta é uma API de autenticação desenvolvida em Java com Spring Boot, utilizan
 - **Spring Boot**: Framework utilizado para criação da API.
 - **Spring Security**: Implementação de segurança e controle de acesso.
 - **MySql**: Banco de dados utilizado para armazenar as informações de usuários.
-- **H2 Database**: Banco de dados utilizado para testes automatizados (ainda em produção).
+- **H2 Database**: Banco de dados utilizado para testes automatizados (ainda em desenvolvimento).
 - **Maven**: Gerenciador de dependências utilizado no projeto.
