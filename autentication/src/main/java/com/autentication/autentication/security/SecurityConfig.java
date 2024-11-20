@@ -22,8 +22,12 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())  // Desabilita o CSRF
             .authorizeHttpRequests(authz -> authz
+                .requestMatchers(HttpMethod.GET, "/swagger-ui.html").permitAll() // Permite acesso ao Swagger UI
+                .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()  // Permite acesso a outros recursos do Swagger UI
+                .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll() // Permite acesso aos docs da API
+
                 .requestMatchers(HttpMethod.POST, "/user/login").permitAll()  // Permite o acesso ao login
-                .requestMatchers(HttpMethod.PUT, "/user/forgetPass").permitAll()  // Permite o acesso ao login
+                .requestMatchers(HttpMethod.PUT, "/user/forgetPass").permitAll()  
                 .requestMatchers(HttpMethod.GET, "/public/**").permitAll()  // Permite acesso público para /public/**
                 .requestMatchers("/user/**").authenticated()  // Requer autenticação para /user/**
                 .anyRequest().denyAll()  // Bloqueia todas as outras rotas não mencionadas
