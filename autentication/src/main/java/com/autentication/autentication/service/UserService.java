@@ -9,17 +9,22 @@ import org.springframework.stereotype.Service;
 
 import com.autentication.autentication.DTO.ErrorResponse;
 import com.autentication.autentication.DTO.LoginRequest;
+import com.autentication.autentication.DTO.LoginResponse;
 import com.autentication.autentication.entity.User;
 import com.autentication.autentication.repository.UserRepository;
+import com.autentication.autentication.security.JwtTokenUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
+    private  UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // Construtor que injeta o repositório UserRepository no serviço
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Método para criar um novo usuário
@@ -29,6 +34,10 @@ public class UserService {
             if (userRepository.existsByEmail(user.getEmail())) {
                 return new ResponseEntity<>("Email já está em uso.", HttpStatus.BAD_REQUEST); 
             }
+
+            // Criptografa a senha antes de salvar no banco
+            String senhaCriptografada = passwordEncoder.encode(user.getSenha());
+            user.setSenha(senhaCriptografada);
 
             userRepository.save(user); 
             return new ResponseEntity<>("Usuário criado com sucesso!", HttpStatus.CREATED);
@@ -50,19 +59,24 @@ public class UserService {
         // Pega o email e a senha do DTO (LoginRequest)
         String emailRecebido = loginRequest.getEmail();
         String senhaRecebida = loginRequest.getSenha();
-    
-        // Busca o usuário no banco de dados com o email e senha fornecidos
-        User user = userRepository.findByEmailAndSenha(emailRecebido, senhaRecebida);
-    
-        // Caso o usuário as credenciais estejam erradas
-        if (user == null) {
-            // Retorna uma resposta com o status 404 e uma mensagem de erro
+      
+        // Busca o usuário no banco de dados com o email fornecido
+        User user = userRepository.findByEmail(emailRecebido);
+        
+        // Caso o usuário não seja encontrado ou senha incorreta
+        if (user == null || !passwordEncoder.matches(senhaRecebida, user.getSenha())) {
             ErrorResponse errorResponse = new ErrorResponse("Email ou senha errados");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
-    
-        // Caso o login seja bem-sucedido, retorna o usuário
-        return ResponseEntity.ok("Logado com sucesso");
+
+        // Gera o token
+        String token = JwtTokenUtil.generateToken(user.getEmail());
+        user.setToken(token); // Salva o token do usuario no banco
+        userRepository.save(user);
+
+        // Caso o login seja bem-sucedido, retorna a mensagem de logado com sucesso e o token
+        LoginResponse loginResponse = new LoginResponse("Logado com sucesso!", token);
+        return ResponseEntity.ok(loginResponse);
     }
 
     // Método para atualizar os dados de um usuário
