@@ -23,6 +23,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())  // Desabilita o CSRF
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers(HttpMethod.POST, "/user/login").permitAll()  // Permite o acesso ao login
+                .requestMatchers(HttpMethod.PUT, "/user/forgetPass").permitAll()  // Permite o acesso ao login
                 .requestMatchers(HttpMethod.GET, "/public/**").permitAll()  // Permite acesso público para /public/**
                 .requestMatchers("/user/**").authenticated()  // Requer autenticação para /user/**
                 .anyRequest().denyAll()  // Bloqueia todas as outras rotas não mencionadas

@@ -35,9 +35,9 @@ public class UserController {
         return userService.loginUser(loginRequest);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<String> updateUser(@PathVariable("id") Long id, @RequestBody @Valid User user) { // Recebe o id do usuário e o objeto User no corpo da requisição e valida os dados com @Valid
-        return userService.updateUser(id, user);
+    @PutMapping("/forgetPass")
+    public ResponseEntity<String> updateUser(@RequestBody LoginRequest loginRequest) { // Recebe o id do usuário e o objeto User no corpo da requisição e valida os dados com @Valid
+        return userService.updateUser(loginRequest);
     }
 
     @DeleteMapping("{id}")

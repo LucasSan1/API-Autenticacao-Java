@@ -80,17 +80,24 @@ public class UserService {
     }
 
     // Método para atualizar os dados de um usuário
-    public ResponseEntity<String> updateUser(long id, User user) {
+    public ResponseEntity<String> updateUser(LoginRequest loginRequest) {
+
+        String email = loginRequest.getEmail();
+        String senha = loginRequest.getSenha();
+
         // Tenta encontrar o usuário pelo ID
-        User userExist = userRepository.findById(id).orElse(null);
+        User userExist = userRepository.findByEmail(email);
 
         // Se o usuário não for encontrado retorna o erro 
         if (userExist == null) {
             return new ResponseEntity<>("Usuário não encontrado.", HttpStatus.NOT_FOUND);
         }
 
-        userExist.setSenha(user.getSenha()); 
+        // Criptografa a senha antes de salvar no banco
+        String senhaCriptografada = passwordEncoder.encode(senha);
+        userExist.setSenha(senhaCriptografada); 
         userRepository.save(userExist); 
+        
         return new ResponseEntity<>("Usuário atualizado com sucesso!", HttpStatus.OK);
     }
 
