@@ -102,17 +102,42 @@ public class UserService {
     }
 
     // Método para deletar um usuário
-    public ResponseEntity<String> deleteUser(Long id) {
+    public ResponseEntity<?> deleteUser(String token) {
+        token = token.substring(7);
         // Tenta encontrar o usuário pelo ID
-        User userExist = userRepository.findById(id).orElse(null);
+        User userExist = userRepository.findByToken(token);
 
         // Se o usuário não for encontrado retorna o erro 
         if (userExist == null) {
-            return new ResponseEntity<>("Usuário não encontrado.", HttpStatus.NOT_FOUND); 
+            ErrorResponse errorResponse = new ErrorResponse("Token inválido");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
 
         // Deleta o usuário do banco de dados
         userRepository.delete(userExist); 
         return new ResponseEntity<>("Usuário deletado com sucesso!", HttpStatus.OK); 
     }
+
+    // Metodo para fazer o logout do usuario removendo seu token
+    public ResponseEntity<?> logoutUser(String token) {
+        // Caso o token tenha o prefixo "Bearer ", remova-o
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        // Tenta encontrar o usuário pelo token
+        User userExist = userRepository.findByToken(token);
+        
+        if (userExist == null) {
+            ErrorResponse errorResponse = new ErrorResponse("Erro ao fazer logout!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+
+        // Remove o token do usuário
+        userExist.setToken("");
+        userRepository.save(userExist);
+        return ResponseEntity.ok("Logout realizado com sucesso!");
+    }
+            
+
 }

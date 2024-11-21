@@ -40,8 +40,13 @@ public class UserController {
         return userService.updateUser(loginRequest);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
-        return userService.deleteUser(id);
+    @DeleteMapping()
+    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {
+        return userService.deleteUser(token);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String token) {
+        return userService.logoutUser(token);
     }
 }

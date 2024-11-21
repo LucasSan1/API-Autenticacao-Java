@@ -12,11 +12,11 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtTokenUtil {
-    private static String secretKey = "segredo"; // chave secreta para assinatura do token
-    
+    // Use a chave gerada de 256 bits para ambos os casos
+    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
         //Gera um JWT para o usuario
         public static String generateToken(String email) {
-            var key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
             return Jwts.builder()
                     .setSubject(email)
@@ -28,8 +28,6 @@ public class JwtTokenUtil {
 
     // Validar token
     public Claims extractClaims(String token){
-
-        Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
 
         return Jwts.parserBuilder()
                 .setSigningKey(key) // Definindo a chave secreta
