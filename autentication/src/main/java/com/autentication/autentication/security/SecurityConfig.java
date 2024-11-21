@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()  // Permite acesso a outros recursos do Swagger UI
                 .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll() // Permite acesso aos docs da API
 
-                
+                .requestMatchers(HttpMethod.POST, "/user").permitAll()
                 .requestMatchers(HttpMethod.POST, "/user/login").permitAll()  // Permite o acesso ao login
                 .requestMatchers(HttpMethod.PUT, "/user/forgetPass").permitAll()  
                 .requestMatchers(HttpMethod.GET, "/public/**").permitAll()  // Permite acesso público para /public/**
