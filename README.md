@@ -7,7 +7,7 @@ Esta é uma API de autenticação desenvolvida em Java com Spring Boot, utilizan
 - **Registro de Usuário**: Permite o cadastro de novos usuários.
 - **Login de Usuário**: Realiza o login de usuários já registrados.
 - **Atualização da sua senha**: Permite realizar a troca da senha do usuario.
-- **Deleta a conta do usuario**: Permite deletar apenas a conta do usuario que logou no sistema (Ainda precisa ser validado).
+- **Deleta a conta do usuario**: Permite deletar apenas a conta do usuario que logou no sistema.
 - **Proteção de Endpoints**: A API permite que endpoints específicos sejam acessados apenas por usuários autenticados.
 
 ## Tecnologias Utilizadas
@@ -16,7 +16,7 @@ Esta é uma API de autenticação desenvolvida em Java com Spring Boot, utilizan
 - **Spring Boot**: Framework utilizado para criação da API.
 - **Spring Security**: Implementação de segurança e controle de acesso.
 - **MySql**: Banco de dados utilizado para armazenar as informações de usuários.
-- **H2 Database**: Banco de dados utilizado para testes automatizados (ainda em desenvolvimento).
+- **H2 Database**: Banco de dados utilizado para testes automatizados.
 - **Maven**: Gerenciador de dependências utilizado no projeto.
 
 # Documentação da API
