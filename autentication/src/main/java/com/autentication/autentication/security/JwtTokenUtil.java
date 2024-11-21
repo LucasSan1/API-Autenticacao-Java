@@ -3,17 +3,22 @@ package com.autentication.autentication.security;
 import java.security.Key;
 import java.util.Date;
 
+import javax.crypto.spec.SecretKeySpec;
+
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+
 
 @Component
 public class JwtTokenUtil {
-    // Use a chave gerada de 256 bits para ambos os casos
-    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+   // Chave secreta para assinatura do token
+    private static final String SECRET_KEY = "minha-chave-secreta-super-forte-12345678900"; 
+    
+    // Convertendo a chave secreta para um objeto Key
+    private static final Key key = new SecretKeySpec(SECRET_KEY.getBytes(), SignatureAlgorithm.HS256.getJcaName());
 
         //Gera um JWT para o usuario
         public static String generateToken(String email) {
